@@ -19,6 +19,8 @@ optional arguments:
 ```
 
 ## Examples
-* `countdown.py --unit h 4`
-* `countdown.py 60`
-* `countdown.py --refresh 30 --unit m 10`
+* `countdown.py --unit h 4` counts down 4 hours
+* `countdown.py 60` counts down for 60 seconds
+* `countdown.py --refresh 30 --unit m 10` counts 10 minutes, updating the
+  display in 30 second intervals. NOTE: the last 30 seconds will count down at
+  normal speed. 
