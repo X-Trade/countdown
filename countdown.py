@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python2
 
 from argparse import ArgumentParser
 from time import sleep
@@ -50,6 +50,9 @@ if __name__ == '__main__':
                         help="specifies if TIME is in hours(h), minutes(m), or seconds(s)")
     parser.add_argument('--refresh', dest='INTERVAL', default=1, type=int,
                         help="how often to refresh the timer (in seconds)")
+    parser.add_argument('--caffeinate', dest='CAFFEINE', default=False, action='store_true',
+                        help="prevent sleep - requires the caffeine library to \
+                        be installed")
     args = parser.parse_args()
 
     if args.TIME <= 0 or args.INTERVAL <= 0:
@@ -61,6 +64,10 @@ if __name__ == '__main__':
     td_zero = TimeDelta(seconds=0)
     end = start + duration
     current = start
+
+    if args.CAFFEINE is True:
+        import caffeine
+        caffeine.on(display=True)
 
     while current < end:
         clear_screen()
@@ -76,3 +83,5 @@ if __name__ == '__main__':
 
     clear_screen()
     print "completed timer for %s seconds" % duration.seconds
+    if args.CAFFEINE is True:
+        caffeine.off()
