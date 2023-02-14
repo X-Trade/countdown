@@ -1,5 +1,6 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
+from __future__ import print_function
 from argparse import ArgumentParser
 from time import sleep
 from datetime import datetime as DateTime, timedelta as TimeDelta
@@ -75,13 +76,13 @@ if __name__ == '__main__':
         remaining = end - current
         if remaining < td_zero:
             break
-        print "%s remaining of %s" % (td2str(remaining), td2str(duration))
+        print("%s remaining of %s" % (td2str(remaining), td2str(duration)))
         if interval >= remaining:
             sleep(1)
         else:
             sleep(interval.seconds)
 
     clear_screen()
-    print "completed timer for %s seconds" % duration.seconds
+    print("completed timer for %s seconds" % duration.seconds)
     if args.CAFFEINE is True:
         caffeine.off()
