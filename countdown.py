@@ -39,9 +39,7 @@ def clear_screen():
     else:
         raise Exception("System type %s not supported" % system_type)
 
-
-if __name__ == '__main__':
-
+def main():
     parser = ArgumentParser(description = 'a simple countdown timer')
     parser.add_argument('TIME', default=10, type=int,
                         help="duration to count down (by default in seconds)")
@@ -86,3 +84,6 @@ if __name__ == '__main__':
     print("completed timer for %s seconds" % duration.seconds)
     if args.CAFFEINE is True:
         caffeine.off()
+
+if __name__ == '__main__':
+    main()
