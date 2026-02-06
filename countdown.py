@@ -25,7 +25,7 @@ def td2str(td):
     h, r = divmod(td.seconds, 3600)
     m, s = divmod(r, 60)
     shortformat = '{:02}h{:02}m{:02}s'.format(h, m, s)
-    if d != 0:   
+    if d != 0:
         return '{}d{}'.format(d, shortformat)
     else:
         return shortformat
@@ -52,21 +52,35 @@ def main():
     parser.add_argument('--caffeinate', dest='CAFFEINE', default=False, action='store_true',
                         help="prevent sleep - requires the caffeine library to \
                         be installed")
+    parser.add_argument('--text', dest='TEXT', default=None, type=str,
+                        help="text to display with each refresh")
+    parser.add_argument('--textfile', dest='TEXTFILE', default=None, type=str,
+                        help="path to a file containing text to display with each refresh")
     args = parser.parse_args()
 
     if args.TIME <= 0 or args.INTERVAL <= 0:
         raise Exception("Negative time values are not supported")
 
-    
     interval = TimeDelta(seconds=args.INTERVAL)
     duration = TimeDelta(seconds=timeunitmultiplier(args.TIME, args.UNIT))
     td_zero = TimeDelta(seconds=0)
     end = start + duration
     current = start
 
+    text = ""
+
+    if args.TEXT is not None:
+        text = args.TEXT
+    elif args.TEXTFILE is not None:
+        with open(args.TEXTFILE, 'r') as f:
+            text = f.read()
+
     if args.CAFFEINE is True:
-        import caffeine
-        caffeine.on(display=True)
+        try:
+            import caffeine
+            caffeine.on(display=True)
+        except ModuleNotFoundError:
+            text = "ERROR: caffeine not found; try `pip3 install caffeine`\n\n" + text
 
     while current < end:
         clear_screen()
@@ -75,6 +89,8 @@ def main():
         if remaining < td_zero:
             break
         print("%s remaining of %s" % (td2str(remaining), td2str(duration)))
+        if text:
+            print("\n" + text)
         if interval >= remaining:
             sleep(1)
         else:
